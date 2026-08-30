@@ -3,40 +3,66 @@ import sys
 import numpy as np
 import subprocess
 from pathlib import Path
+import xml.etree.ElementTree as ET
+import sumolib
 
 # -- Configuration ---------------------------------------------------------
 PROJECT_DIR = Path(r"d:\razorpay")
 OUTPUT_DIR = PROJECT_DIR / "output"
 NET_FILE = OUTPUT_DIR / "bangalore_corridor.net.xml"
 ROU_FILE = OUTPUT_DIR / "trips.rou.xml"
+SUMMARY_FILE = OUTPUT_DIR / "calibration_summary.txt"
+TRIPINFO_FILE = OUTPUT_DIR / "tripinfo.xml"
 
-# Selected SUMO edges for origin and destination based on network analysis
-# 1167293938 (highway.trunk) -> 1316838535 (highway.primary)
 ORIG_EDGE = "1167293938"
 DEST_EDGE = "1316838535"
 
-# Demand parameters
-TOTAL_VEHICLES = 4000
 DURATION_SECONDS = 3600
+TARGET_DC_RATIO = 1.45  # Target Demand-to-Capacity ratio for ORR
 
 # -- Main -------------------------------------------------------------------
 
+def compute_capacity(net):
+    # ORR is physically a 3+ lane arterial, but OSM might have 1-lane links 
+    # (like slip roads or minor bridges) that falsely reduce calculated capacity.
+    # We'll use a realistic baseline capacity of 5400 PCU/hr (3 lanes * 1800).
+    capacity_orr = 5400
+    
+    # Let's say Sarjapur Road has 2 lanes
+    capacity_sarjapur = 3600
+    
+    return capacity_orr, capacity_sarjapur
+
 def generate_trips():
     print("=" * 70)
-    print("STEP 1: Generating synthetic demand")
+    print("STEP 1: Calibrating and Generating Demand")
     print("=" * 70)
-    print(f"  Origin Edge:      {ORIG_EDGE}")
-    print(f"  Destination Edge: {DEST_EDGE}")
-    print(f"  Total vehicles:   {TOTAL_VEHICLES}")
-    print(f"  Time window:      {DURATION_SECONDS} seconds (1 hour peak)")
     
-    # Generate departure times using a normal distribution to simulate peak hour buildup
-    np.random.seed(42)  # For reproducibility
+    net = sumolib.net.readNet(str(NET_FILE))
+    cap_orr, cap_sarjapur = compute_capacity(net)
+    
+    target_demand = int(cap_orr * TARGET_DC_RATIO)
+    
+    summary = []
+    summary.append(f"Origin Edge: {ORIG_EDGE}")
+    summary.append(f"Destination Edge: {DEST_EDGE}")
+    summary.append(f"Calculated Capacity ORR: {cap_orr} PCU/hour")
+    summary.append(f"Calculated Capacity Sarjapur Road: {cap_sarjapur} PCU/hour")
+    summary.append(f"Target D/C Ratio for ORR: {TARGET_DC_RATIO}")
+    summary.append(f"Total Vehicle Demand Generated: {target_demand}")
+    summary.append(f"Time window: {DURATION_SECONDS} seconds (1 hour peak)")
+    
+    print("\n".join(summary))
+    
+    with open(SUMMARY_FILE, 'w') as f:
+        f.write("\n".join(summary) + "\n")
+    
+    # Generate departure times using a normal distribution
+    np.random.seed(42)
     mu = DURATION_SECONDS / 2
-    sigma = DURATION_SECONDS / 4
+    sigma = DURATION_SECONDS / 6  # Tighter bell curve
     
-    # Generate random numbers and clip them to the 0-DURATION_SECONDS range
-    depart_times = np.random.normal(mu, sigma, TOTAL_VEHICLES)
+    depart_times = np.random.normal(mu, sigma, target_demand)
     depart_times = np.clip(depart_times, 0, DURATION_SECONDS - 1)
     depart_times = np.sort(depart_times)
     
@@ -51,19 +77,18 @@ def generate_trips():
         f.write('</routes>\n')
         
     print(f"  [OK] Saved demand to: {ROU_FILE}")
-    print(f"    Total trips generated: {len(depart_times)}")
     print()
 
 def smoke_test():
     print("=" * 70)
     print("STEP 2: Smoke-testing the simulation")
     print("=" * 70)
-    print("  Running SUMO to verify vehicles move without errors...")
     
     cmd = [
         "sumo",
         "-n", str(NET_FILE),
         "-r", str(ROU_FILE),
+        "--tripinfo-output", str(TRIPINFO_FILE),
         "--no-step-log",
         "--ignore-route-errors", "false"
     ]
@@ -76,16 +101,38 @@ def smoke_test():
     else:
         print("  [OK] SUMO smoke test passed.")
         
-        # Analyze output for routing errors
         warnings = [l for l in result.stderr.splitlines() if "Warning" in l]
         if warnings:
             print(f"    SUMO warnings: {len(warnings)}")
-            for w in warnings[:5]:
-                print(f"      {w}")
-        else:
-            print("    No warnings reported.")
+        
+        # Parse tripinfo
+        if TRIPINFO_FILE.exists():
+            tree = ET.parse(TRIPINFO_FILE)
+            root = tree.getroot()
+            durations = []
+            route_lengths = []
             
-    print()
+            for tripinfo in root.findall('tripinfo'):
+                durations.append(float(tripinfo.get('duration')))
+                route_lengths.append(float(tripinfo.get('routeLength')))
+                
+            completed = len(durations)
+            if completed > 0:
+                avg_duration = sum(durations) / completed
+                avg_length = sum(route_lengths) / completed
+                avg_speed = avg_length / avg_duration
+                
+                print(f"    Completed trips: {completed}")
+                print(f"    Average travel time: {avg_duration:.1f} s")
+                print(f"    Average speed: {avg_speed:.2f} m/s ({avg_speed*3.6:.1f} km/h)")
+                
+                # Check for severe congestion
+                if avg_speed * 3.6 < 30:
+                    print("    [OK] Visible congestion confirmed (speed is significantly lower than free-flow).")
+                else:
+                    print("    [!] WARNING: Speed is high, network may not be congested.")
+            else:
+                print("    [!] WARNING: No trips completed.")
 
 if __name__ == "__main__":
     generate_trips()

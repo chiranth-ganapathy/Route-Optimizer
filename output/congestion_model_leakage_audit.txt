@@ -1,0 +1,221 @@
+========================================================================
+CONGESTION MODEL LEAKAGE AUDIT
+========================================================================
+
+Filtered rows: 1,447
+Target: Congestion Level
+Same split: 80/20, random_state=42, stratified by Road/Intersection Name
+
+RAW CORRELATIONS WITH TARGET
+----------------------------------------
+                  feature  correlation_with_target  abs_correlation  leakage_risk
+Road Capacity Utilization                 0.883305         0.883305          True
+           Traffic Volume                 0.827424         0.827424         False
+        Travel Time Index                 0.779860         0.779860         False
+            Average Speed                -0.380207         0.380207         False
+
+Leakage threshold: absolute correlation > 0.85
+
+ORIGINAL RANDOM FOREST FEATURE IMPORTANCE
+----------------------------------------
+Aggregated to original input columns:
+                    source_feature  importance
+                    Traffic Volume    0.504380
+              Environmental Impact    0.436638
+         Road Capacity Utilization    0.038505
+                     Parking Usage    0.002332
+         Traffic Signal Compliance    0.002180
+            Public Transport Usage    0.002145
+                 Travel Time Index    0.002138
+      Pedestrian and Cyclist Count    0.001900
+                     Average Speed    0.001895
+                               day    0.001841
+                  Incident Reports    0.001465
+                             month    0.001457
+                Weather Conditions    0.001023
+                       day_of_week    0.000787
+                              year    0.000435
+            Road/Intersection Name    0.000350
+                         Area Name    0.000280
+Roadwork and Construction Activity    0.000151
+                        is_weekend    0.000096
+
+Top transformed features:
+                                 feature  importance
+                 numeric__Traffic Volume    0.504380
+           numeric__Environmental Impact    0.436638
+      numeric__Road Capacity Utilization    0.038505
+                  numeric__Parking Usage    0.002332
+      numeric__Traffic Signal Compliance    0.002180
+         numeric__Public Transport Usage    0.002145
+              numeric__Travel Time Index    0.002138
+   numeric__Pedestrian and Cyclist Count    0.001900
+                  numeric__Average Speed    0.001895
+                            numeric__day    0.001841
+               numeric__Incident Reports    0.001465
+                          numeric__month    0.001457
+                    numeric__day_of_week    0.000787
+                           numeric__year    0.000435
+categorical__Weather Conditions_Overcast    0.000360
+
+DOMINANT DRIVERS
+----------------------------------------
+Traffic Volume, Environmental Impact, Road Capacity Utilization
+
+LEAKAGE DECISION
+----------------------------------------
+Confirmed leakage risk: Road Capacity Utilization are both highly correlated with the target and among the top drivers.
+Retrained independent model without Travel Time Index and Road Capacity Utilization. Environmental Impact was also excluded from the independent set because it appears derived from traffic conditions and is not a clean exogenous predictor.
+
+SIDE-BY-SIDE HELD-OUT METRICS
+----------------------------------------
+            model                     feature_set       r2      rmse
+Linear Regression with suspected leakage features 0.929974  7.054984
+Linear Regression   without leakage-risk features 0.812995 11.529057
+    Random Forest with suspected leakage features 0.970008  4.617088
+    Random Forest   without leakage-risk features 0.970422  4.585108
+
+SAMPLE TEST PREDICTIONS
+----------------------------------------
+      Date Road/Intersection Name  Traffic Volume  Average Speed  actual_congestion_level  with_leaky_features_prediction  without_leaky_features_prediction
+2023-12-27          Sarjapur Road           40840      35.810249               100.000000                      100.000000                         100.000000
+2022-11-03    Marathahalli Bridge           21609      37.012151                72.239641                       75.799087                          75.561751
+2022-04-07    Marathahalli Bridge           26921      43.629397                97.836204                       91.546145                          91.271169
+2022-06-19    Marathahalli Bridge           30553      30.921011                93.972609                       98.982628                          99.068078
+2023-08-07    Marathahalli Bridge           28215      33.904680                94.137211                       93.387987                          93.610820
+
+SAVED HONEST MODEL
+----------------------------------------
+D:\razorpay\output\bangalore_congestion_model_no_leakage.joblib
+
+Machine-readable summary:
+{
+  "correlations": [
+    {
+      "feature": "Road Capacity Utilization",
+      "correlation_with_target": 0.8833048292479763,
+      "abs_correlation": 0.8833048292479763,
+      "leakage_risk": true
+    },
+    {
+      "feature": "Traffic Volume",
+      "correlation_with_target": 0.8274238313221949,
+      "abs_correlation": 0.8274238313221949,
+      "leakage_risk": false
+    },
+    {
+      "feature": "Travel Time Index",
+      "correlation_with_target": 0.7798601648215785,
+      "abs_correlation": 0.7798601648215785,
+      "leakage_risk": false
+    },
+    {
+      "feature": "Average Speed",
+      "correlation_with_target": -0.3802068821580254,
+      "abs_correlation": 0.3802068821580254,
+      "leakage_risk": false
+    }
+  ],
+  "aggregated_feature_importance": [
+    {
+      "source_feature": "Traffic Volume",
+      "importance": 0.5043803427300246
+    },
+    {
+      "source_feature": "Environmental Impact",
+      "importance": 0.4366384150048292
+    },
+    {
+      "source_feature": "Road Capacity Utilization",
+      "importance": 0.03850513222792755
+    },
+    {
+      "source_feature": "Parking Usage",
+      "importance": 0.0023317228921787094
+    },
+    {
+      "source_feature": "Traffic Signal Compliance",
+      "importance": 0.0021799104904075897
+    },
+    {
+      "source_feature": "Public Transport Usage",
+      "importance": 0.0021450153407402296
+    },
+    {
+      "source_feature": "Travel Time Index",
+      "importance": 0.002137899422412155
+    },
+    {
+      "source_feature": "Pedestrian and Cyclist Count",
+      "importance": 0.001900339929208555
+    },
+    {
+      "source_feature": "Average Speed",
+      "importance": 0.001895144239810674
+    },
+    {
+      "source_feature": "day",
+      "importance": 0.0018414056208570931
+    },
+    {
+      "source_feature": "Incident Reports",
+      "importance": 0.0014650338836446697
+    },
+    {
+      "source_feature": "month",
+      "importance": 0.001456593552872556
+    },
+    {
+      "source_feature": "Weather Conditions",
+      "importance": 0.0010230729669009275
+    },
+    {
+      "source_feature": "day_of_week",
+      "importance": 0.0007867097114993753
+    },
+    {
+      "source_feature": "year",
+      "importance": 0.00043519638113228854
+    },
+    {
+      "source_feature": "Road/Intersection Name",
+      "importance": 0.00035043324710148786
+    },
+    {
+      "source_feature": "Area Name",
+      "importance": 0.0002803580077976078
+    },
+    {
+      "source_feature": "Roadwork and Construction Activity",
+      "importance": 0.00015080408740615782
+    },
+    {
+      "source_feature": "is_weekend",
+      "importance": 9.647026324860728e-05
+    }
+  ],
+  "original_metrics": {
+    "Linear Regression": {
+      "r2": 0.9299742140818131,
+      "rmse": 7.054984211997199
+    },
+    "Random Forest": {
+      "r2": 0.9700082190167166,
+      "rmse": 4.617088278548651
+    }
+  },
+  "without_leakage_risk_metrics": {
+    "Linear Regression": {
+      "r2": 0.8129948910066835,
+      "rmse": 11.52905699510628
+    },
+    "Random Forest": {
+      "r2": 0.9704222546664814,
+      "rmse": 4.585108140172032
+    }
+  },
+  "implicated_features": [
+    "Road Capacity Utilization"
+  ],
+  "saved_model": "D:\\razorpay\\output\\bangalore_congestion_model_no_leakage.joblib"
+}

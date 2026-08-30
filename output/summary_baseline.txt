@@ -1,0 +1,24 @@
+
+=================================================================
+BASELINE — Shortest-Path Routing (All Vehicles on ORR)
+=================================================================
+Vehicles simulated   : 7,830
+Completed trips      : 7,830  (teleports: 0, warnings: 0)
+
+--- Travel Time ---
+Avg travel time      : 775.6 s  (12.9 min)
+Avg corridor speed   : 51.1 km/h
+
+--- timeLoss (headline congestion metric) ---
+Total system timeLoss   : 1,138,326 s  (316.2 vehicle-hours lost)
+Avg timeLoss / vehicle  : 145.4 s  (2.4 min per driver)
+Median timeLoss         : 137.3 s
+Max timeLoss            : 323.5 s  (5.4 min worst case)
+Drivers delayed > 60 s  : 7,779 / 7,830  (99.3%)
+
+--- Video headlines ---
+  7,779 out of 7,830 drivers were significantly delayed under
+  shortest-path (Google Maps-style) routing.
+  Total system waste: 316.2 vehicle-hours lost to congestion
+  in a single peak hour.
+=================================================================

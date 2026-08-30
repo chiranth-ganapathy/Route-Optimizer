@@ -1,0 +1,55 @@
+========================================================================
+BANGALORE REAL-DATA CONGESTION MODEL
+========================================================================
+
+DATA FILTER
+----------------------------------------
+Source CSV: D:\razorpay\data\Banglore_traffic_Dataset.csv
+Rows after filtering: 1,447
+Date range: 2022-01-01 to 2024-08-09
+Rows by road/intersection:
+  Silk Board Junction: 275
+  Marathahalli Bridge: 492
+  Sarjapur Road: 680
+
+TARGET AND FEATURES
+----------------------------------------
+Target predicted: Congestion Level
+Numerical features:
+  Traffic Volume, Average Speed, Travel Time Index, Road Capacity Utilization, Incident Reports, Environmental Impact, Public Transport Usage, Traffic Signal Compliance, Parking Usage, Pedestrian and Cyclist Count, year, month, day, day_of_week, is_weekend
+Categorical features:
+  Area Name, Road/Intersection Name, Weather Conditions, Roadwork and Construction Activity
+
+HELD-OUT TEST METRICS
+----------------------------------------
+Linear Regression: R2=0.9300, RMSE=7.0550
+Random Forest: R2=0.9700, RMSE=4.6171
+
+Best saved model by RMSE: Random Forest
+Saved model: D:\razorpay\output\bangalore_congestion_model.joblib
+
+SAMPLE TEST PREDICTIONS
+----------------------------------------
+      Date Road/Intersection Name  Traffic Volume  Average Speed  Road Capacity Utilization  actual_congestion_level  predicted_congestion_level  prediction_error
+2023-12-27          Sarjapur Road           40840      35.810249                      100.0               100.000000                  100.000000          0.000000
+2022-11-03    Marathahalli Bridge           21609      37.012151                      100.0                72.239641                   75.799087          3.559446
+2022-04-07    Marathahalli Bridge           26921      43.629397                      100.0                97.836204                   91.546145         -6.290060
+2022-06-19    Marathahalli Bridge           30553      30.921011                      100.0                93.972609                   98.982628          5.010018
+2023-08-07    Marathahalli Bridge           28215      33.904680                      100.0                94.137211                   93.387987         -0.749224
+
+HONEST SCOPE NOTE
+----------------------------------------
+This model was trained on real Bangalore traffic rows for Silk Board Junction, Marathahalli Bridge, and Sarjapur Road only. It predicts Congestion Level from measured traffic volume, speed, capacity utilization, incident, public-transport, compliance, parking, pedestrian/cyclist, weather, roadwork, location, and date-derived features.
+The selected Kaggle dataset does not contain ORR or Outer Ring Road rows. ORR congestion behavior in this project therefore remains simulation-based, calibrated against standard road capacity and the SUMO network, while the real-data model contributes evidence for the available Bangalore corridor locations. This is a hybrid real-data + simulation approach, not a claim that every route is directly real-data-driven.
+
+Machine-readable metrics:
+{
+  "Linear Regression": {
+    "r2": 0.9299742140818131,
+    "rmse": 7.054984211997199
+  },
+  "Random Forest": {
+    "r2": 0.9700082190167166,
+    "rmse": 4.617088278548651
+  }
+}

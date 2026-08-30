@@ -1,0 +1,7 @@
+ORR: 10.31km, freeflow=777s, capacity=1900veh/hr
+Sarjapur: 17.56km, freeflow=1277s, capacity=1900veh/hr
+
+BASELINE: 100% ORR, 34395.6s/veh, 74810.3 vehicle-hours total
+OPTIMAL: 4177 ORR / 3653 Sarjapur, 8011.2 vehicle-hours total
+
+IMPROVEMENT: 89.3% reduction in total system travel time

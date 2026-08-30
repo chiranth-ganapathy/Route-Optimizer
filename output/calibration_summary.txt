@@ -1,0 +1,7 @@
+Origin Edge: 1167293938
+Destination Edge: 1316838535
+Calculated Capacity ORR: 5400 PCU/hour
+Calculated Capacity Sarjapur Road: 3600 PCU/hour
+Target D/C Ratio for ORR: 1.45
+Total Vehicle Demand Generated: 7830
+Time window: 3600 seconds (1 hour peak)

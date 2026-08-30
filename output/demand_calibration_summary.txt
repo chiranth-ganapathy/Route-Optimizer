@@ -1,0 +1,108 @@
+========================================================================
+TASK 2 DEMAND CALIBRATION SUMMARY
+========================================================================
+
+CAPACITY BENCHMARK
+----------------------------------------
+Benchmark used: FHWA HPMS Field Manual Appendix N / HCM base saturation flow: 1,900 passenger cars per hour per lane
+Source URL: https://www.fhwa.dot.gov/ohim/hpmsmanl/appn7.cfm
+
+ROUTE CAPACITY FROM SUMO NETWORK
+----------------------------------------
+ORR:
+  Route distance: 11.02 km
+  Matched SUMO edges: 29
+  Lane distribution by edge length: 1 lane(s): 0.00 km, 2 lane(s): 0.00 km, 3 lane(s): 0.00 km, 7 lane(s): 0.00 km
+  Min/median/max lanes: 1/2/7
+  Dominant lane count used for capacity: 1
+  Approx capacity: 1,900 PCU/hour
+  Start edge: 27555707
+  End edge: 88161799#1
+
+Sarjapur Road:
+  Route distance: 13.57 km
+  Matched SUMO edges: 27
+  Lane distribution by edge length: 1 lane(s): 0.00 km, 2 lane(s): 0.00 km, 3 lane(s): 0.00 km, 4 lane(s): 0.00 km
+  Min/median/max lanes: 1/2/4
+  Dominant lane count used for capacity: 1
+  Approx capacity: 1,900 PCU/hour
+  Start edge: 230423164
+  End edge: 88161799#1
+
+DEMAND
+----------------------------------------
+Total vehicles generated: 2,755
+Peak window: 60 minutes
+Demand / ORR capacity ratio: 1.45x
+Demand / Sarjapur Road capacity ratio: 1.45x
+Departure shape: deterministic triangular ramp-up/ramp-down
+Vehicles by 10-minute bucket:
+  minute 00-10: 178
+  minute 10-20: 600
+  minute 20-30: 600
+  minute 30-40: 600
+  minute 40-50: 600
+  minute 50-60: 177
+
+FILES
+----------------------------------------
+Trip demand input: D:\razorpay\output\capacity_calibrated_peak.trips.xml
+Shortest-path routed demand: D:\razorpay\output\capacity_calibrated_peak_shortest.rou.xml
+Smoke-test tripinfo: D:\razorpay\output\smoke_test_tripinfo.xml
+
+SMOKE TEST
+----------------------------------------
+duarouter exit code: 0
+sumo exit code: 0
+Vehicles completed: 2,755 / 2,755
+
+sumo stderr:
+Warning: Teleporting vehicle 'veh_00119'; collision with vehicle 'veh_00112', lane='1289252169_3', gap=-0.32, time=848.00, stage=move.
+Warning: Vehicle 'veh_00119' ends teleporting on edge '230182006', time=848.00.
+Warning: Vehicle 'veh_00432' performs emergency braking on lane '1303669679_2' with decel=9.00, wished=4.50, severity=1.00, time=1171.00.
+Warning: Vehicle 'veh_00526' performs emergency braking on lane '1303669679_2' with decel=9.00, wished=4.50, severity=1.00, time=1256.00.
+Warning: Teleporting vehicle 'veh_00526'; collision with vehicle 'veh_00331', lane='377105483_2', gap=-2.81, time=1256.00, stage=move.
+Warning: Vehicle 'veh_00526' ends teleporting on edge '377105483-AddedOffRampEdge', time=1257.00.
+Warning: Vehicle 'veh_00528' performs emergency braking on lane '377105485_2' with decel=9.00, wished=4.50, severity=1.00, time=1290.00.
+Warning: Teleporting vehicle 'veh_00528'; collision with vehicle 'veh_00406', lane='1303669679_2', gap=-0.83, time=1290.00, stage=move.
+Warning: Vehicle 'veh_00528' ends teleporting on edge '377105483', time=1290.00.
+Warning: Vehicle 'veh_00509' performs emergency braking on lane '1303669679_2' with decel=9.00, wished=4.50, severity=1.00, time=1308.00.
+Warning: Teleporting vehicle 'veh_00591'; collision with vehicle 'veh_00871', lane='1289252169_3', gap=-1.52, time=1860.00, stage=move.
+Warning: Vehicle 'veh_00591' ends teleporting on edge '230182006', time=1860.00.
+Warning: Vehicle 'veh_01181' performs emergency braking on lane '1289252169_3' with decel=9.00, wished=4.50, severity=1.00, time=2196.00.
+Warning: Teleporting vehicle 'veh_02107'; collision with vehicle 'veh_02217', lane='1289252169_3', gap=-0.37, time=3508.00, stage=move.
+Warning: Vehicle 'veh_02107' ends teleporting on edge '230182006', time=3508.00.
+Warning: Teleporting vehicle 'veh_02279'; collision with vehicle 'veh_02554', lane='1289252169_3', gap=-0.25, time=3936.00, stage=move.
+Warning: Vehicle 'veh_02279' ends teleporting on edge '230182006', time=3936.00.
+Warning: Vehicle 'veh_02719' performs emergency braking on lane '1303669679_2' with decel=9.00, wished=4.50, severity=1.00, time=5155.00.
+Warning: Vehicle 'veh_02500' performs emergency braking on lane '1303669679_2' with decel=9.00, wished=4.50, severity=1.00, time=5269.00.
+Warning: Vehicle 'veh_02089' performs emergency braking on lane '1146865108#8_0' with decel=9.00, wished=4.50, severity=1.00, time=6435.00.
+Warning: Teleporting vehicle 'veh_01847'; waited too long (jam), lane='1146865108#8_0', time=6930.00.
+Warning: Vehicle 'veh_01847' ends teleporting on edge '1303738159#1', time=6930.00.
+Warning: Teleporting vehicle 'veh_02600'; waited too long (jam), lane='1146865108#8_0', time=6931.00.
+Warning: Vehicle 'veh_02600' ends teleporting on edge '1303738159#1', time=6932.00.
+
+sumo stdout:
+Loading net-file from 'D:\razorpay\output\bangalore_corridor.net.xml' ... done (710ms).
+Loading route-files incrementally from 'D:\razorpay\output\capacity_calibrated_peak_shortest.rou.xml'
+Loading done.
+Simulation version 1.27.1 started with time: 0.00.
+Simulation ended at time: 10800.00.
+Reason: The final simulation step has been reached.
+Performance:
+ Duration: 86.27s
+ Real time factor: 125.184
+ UPS: 78617.365804
+Vehicles:
+ Inserted: 2755
+ Running: 0
+ Waiting: 0
+ Teleports: 8 (Collisions: 6, Jam: 2)
+ Emergency Braking: 8
+Statistics (avg of 2755):
+ RouteLength: 10855.89
+ Speed: 6.19
+ Duration: 2461.91
+ WaitingTime: 695.06
+ TimeLoss: 1919.35
+ DepartDelay: 2.36

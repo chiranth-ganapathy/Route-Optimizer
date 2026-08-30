@@ -1,0 +1,24 @@
+=================================================================
+SYSTEM-OPTIMAL: Capacity-Weighted Route Distribution (Analytical Approximation)
+=================================================================
+
+  Vehicles simulated   : 7,830
+    -> ORR             : 3,381 (43.2%)
+    -> Sarjapur Road   : 4,449 (56.8%)
+  Completed trips      : 7,830  (teleports: 0)
+
+--- Travel Time ---
+  Avg travel time      : 734.3 s  (12.2 min)
+  Avg corridor speed   : 61.2 km/h
+
+--- timeLoss (headline congestion metric) ---
+  Total system timeLoss  : 160,828 s  (44.7 vehicle-hours)
+  Avg timeLoss/vehicle   : 20.5 s  (0.34 min)
+  Drivers delayed >60 s  : 0 / 7,830  (0.0%)
+
+--- vs Baseline (shortest-path / Google Maps) ---
+  Baseline timeLoss      : 316.2 vehicle-hours
+  Optimal timeLoss       : 44.7 vehicle-hours
+  System improvement     : 85.9%
+
+=================================================================

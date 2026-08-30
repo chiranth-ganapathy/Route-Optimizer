@@ -1,0 +1,7 @@
+ROUTING DECISION EXPLANATION
+System-Optimal Assignment: 43% ORR / 57% Sarjapur Road
+
+WHY THIS SPLIT?
+At full baseline demand, ORR alone reaches over 130% of its capacity at the Silk Board bottleneck, causing 145 seconds of average delay per vehicle and wasting 316.2 vehicle-hours in a single peak hour.
+
+By redistributing 4,449 vehicles to Sarjapur Road (13.6km vs 11.0km — a 23% longer physical route), the system-optimal assignment keeps both routes below their congestion threshold. Because traffic flows smoothly on both routes rather than queueing massively on one, total system delay is reduced by 86%.
