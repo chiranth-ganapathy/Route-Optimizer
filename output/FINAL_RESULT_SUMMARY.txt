@@ -1,0 +1,2 @@
+Baseline: 6.9 min/vehicle, 840 vehicle-hours
+Optimal: 0.3 min/vehicle, 604 vehicle-hours, 28.1% improvement.
